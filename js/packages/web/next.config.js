@@ -30,4 +30,16 @@ module.exports = withPlugins(plugins, {
   env:{
     NEXT_PUBLIC_STORE_OWNER_ADDRESS_ADDRESS: process.env.REACT_APP_STORE_OWNER_ADDRESS_ADDRESS,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/art/create/:step_param*',
+        destination: '/art/create',
+      },
+      {
+        source: '/auction/create/:step_param*',
+        destination: '/auction/create',
+      },
+    ]
+  },
 });
