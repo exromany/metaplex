@@ -52,3 +52,5 @@ export const ArtistsView = () => {
     </Layout>
   );
 };
+
+export default ArtistsView;

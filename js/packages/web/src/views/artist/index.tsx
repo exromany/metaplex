@@ -64,3 +64,5 @@ export const ArtistView = () => {
     </>
   );
 };
+
+export default ArtistView;

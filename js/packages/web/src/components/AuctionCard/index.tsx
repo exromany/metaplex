@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Col, Button, InputNumber, Spin } from 'antd';
-import { MemoryRouter, Route, Redirect, Link } from 'react-router-dom';
+import Link from 'next/link';
 
 import {
   useConnection,
@@ -192,13 +192,14 @@ export const AuctionCard = ({
   const [value, setValue] = useState<number>();
   const [loading, setLoading] = useState<boolean>(false);
   const [showBidModal, setShowBidModal] = useState<boolean>(false);
+  const [bidModalState, setBidModalState] =
+    useState<'placebid' | 'addfunds'>('placebid');
   const [showRedeemedBidModal, setShowRedeemedBidModal] =
     useState<boolean>(false);
   const [showRedemptionIssue, setShowRedemptionIssue] =
     useState<boolean>(false);
   const [showBidPlaced, setShowBidPlaced] = useState<boolean>(false);
   const [lastBid, setLastBid] = useState<{ amount: BN } | undefined>(undefined);
-  const [modalHistory, setModalHistory] = useState<any>();
   const [showWarningModal, setShowWarningModal] = useState<boolean>(false);
   const [printingCost, setPrintingCost] = useState<number>();
 
@@ -245,6 +246,24 @@ export const AuctionCard = ({
 
   const isAuctionNotStarted =
     auctionView.auction.info.state === AuctionState.Created;
+
+  const placeBid = async () => {
+    setLoading(true);
+    if (myPayingAccount && value) {
+      const bid = await sendPlaceBid(
+        connection,
+        wallet,
+        myPayingAccount.pubkey,
+        auctionView,
+        accountByMint,
+        value,
+      );
+      setLastBid(bid);
+      setShowBidModal(false);
+      setShowBidPlaced(true);
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="auction-container" style={style}>
@@ -432,7 +451,10 @@ export const AuctionCard = ({
           }}
         >
           Your bid has been redeemed please view your NFTs in{' '}
-          <Link to="/artworks">My Items</Link>.
+          <Link href="/artworks">
+            <a>My Items</a>
+          </Link>
+          .
         </p>
         <Button
           onClick={() => setShowRedeemedBidModal(false)}
@@ -448,35 +470,9 @@ export const AuctionCard = ({
         bodyStyle={{
           alignItems: 'start',
         }}
-        afterClose={() => modalHistory.replace('/placebid')}
+        afterClose={() => setBidModalState('placebid')}
       >
-        <MemoryRouter>
-          <Redirect to="/placebid" />
-
-          <Route
-            exact
-            path="/placebid"
-            render={({ history }) => {
-              setModalHistory(history);
-              const placeBid = async () => {
-                setLoading(true);
-                if (myPayingAccount && value) {
-                  const bid = await sendPlaceBid(
-                    connection,
-                    wallet,
-                    myPayingAccount.pubkey,
-                    auctionView,
-                    accountByMint,
-                    value,
-                  );
-                  setLastBid(bid);
-                  setShowBidModal(false);
-                  setShowBidPlaced(true);
-                  setLoading(false);
-                }
-              };
-
-              return (
+        {bidModalState === 'placebid' && (
                 <>
                   <h2 className="modal-title">Place a bid</h2>
                   {!!gapTime && (
@@ -551,8 +547,8 @@ export const AuctionCard = ({
                       ◎ {formatAmount(balance.balance, 2)}{' '}
                       <span style={{ color: '#717171' }}>available</span>
                     </div>
-                    <Link
-                      to="/addfunds"
+                    <a
+                      onClick={() => setBidModalState('addfunds')}
                       style={{
                         float: 'right',
                         margin: '5px 20px',
@@ -560,7 +556,7 @@ export const AuctionCard = ({
                       }}
                     >
                       Add funds
-                    </Link>
+                    </a>
                   </div>
 
                   <br />
@@ -586,11 +582,9 @@ export const AuctionCard = ({
                     )}
                   </Button>
                 </>
-              );
-            }}
-          />
+        )}
 
-          <Route exact path="/addfunds">
+        {bidModalState === 'addfunds' && (
             <div style={{ maxWidth: '100%' }}>
               <h2>Add funds</h2>
               <p style={{ color: 'white' }}>
@@ -635,7 +629,7 @@ export const AuctionCard = ({
                 to get set up.
               </p>
               <Button
-                onClick={() => modalHistory.push('/placebid')}
+              onClick={() => setBidModalState('placebid')}
                 style={{
                   background: '#454545',
                   borderRadius: 14,
@@ -679,8 +673,7 @@ export const AuctionCard = ({
                 </div>
               </Button>
             </div>
-          </Route>
-        </MemoryRouter>
+        )}
       </MetaplexModal>
 
       <MetaplexModal

@@ -212,6 +212,8 @@ export const ArtCreateView = () => {
   );
 };
 
+export default ArtCreateView;
+
 const CategoryStep = (props: {
   confirm: (category: MetadataCategory) => void;
 }) => {

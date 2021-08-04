@@ -201,3 +201,5 @@ export const ArtView = () => {
     </Content>
   );
 };
+
+export default ArtView;

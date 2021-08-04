@@ -1,5 +1,8 @@
-import React from 'react';
-import { AdminView } from '../views/admin';
+import dynamic from 'next/dynamic';
+
+const AdminView = dynamic(() => import('../views/admin'), {
+  ssr: false,
+});
 
 export default function AdminPage() {
   return <AdminView />;

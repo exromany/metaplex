@@ -543,6 +543,8 @@ export const AuctionCreateView = () => {
   );
 };
 
+export default AuctionCreateView;
+
 const CategoryStep = (props: {
   confirm: (category: AuctionCategory) => void;
 }) => {

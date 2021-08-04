@@ -111,3 +111,5 @@ export const ArtworksView = () => {
     </Layout>
   );
 };
+
+export default ArtworksView;

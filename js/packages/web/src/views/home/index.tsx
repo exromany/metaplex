@@ -248,3 +248,5 @@ export const HomeView = () => {
     </Layout>
   );
 };
+
+export default HomeView;

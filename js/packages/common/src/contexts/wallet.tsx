@@ -13,7 +13,7 @@ import { notify } from './../utils/notifications';
 import { useConnectionConfig } from './connection';
 import { useLocalStorageState } from '../utils/utils';
 import { PhantomWalletAdapter } from '../wallet-adapters/phantom';
-import { useLocation } from 'react-router';
+import { useRouter } from 'next/router';
 import { MetaplexModal } from '../components/MetaplexModal';
 
 import { TorusWalletAdapter } from '../wallet-adapters/torus';
@@ -59,9 +59,9 @@ const WalletContext = React.createContext<{
 
 export function WalletProvider({ children = null as any }) {
   const { endpoint } = useConnectionConfig();
-  const location = useLocation();
+  const router = useRouter();
   const [autoConnect, setAutoConnect] = useState(
-    location.pathname.indexOf('result=') >= 0 || false,
+    router.pathname.indexOf('result=') >= 0 || false,
   );
   const [providerUrl, setProviderUrl] = useLocalStorageState('walletProvider');
 

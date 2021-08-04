@@ -40,7 +40,6 @@
     "@testing-library/user-event": "^7.2.1",
     "@types/chart.js": "^2.9.29",
     "@types/echarts": "^4.9.0",
-    "@types/react-router-dom": "^5.1.6",
     "@welldone-software/why-did-you-render": "^6.0.5",
     "antd": "^4.6.6",
     "bignumber.js": "^9.0.1",

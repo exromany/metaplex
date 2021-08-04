@@ -49,6 +49,8 @@ export const AdminView = () => {
   );
 };
 
+export default AdminView;
+
 function ArtistModal({
   setUpdatedCreators,
   uniqueCreatorsWithUpdates,

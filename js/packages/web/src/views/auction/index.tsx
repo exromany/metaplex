@@ -218,6 +218,8 @@ export const AuctionView = () => {
   );
 };
 
+export default AuctionView;
+
 const BidLine = (props: {
   bid: any;
   index: number;

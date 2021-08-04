@@ -1,8 +1,12 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import WrapPage from './_wrap';
+import dynamic from 'next/dynamic';
 
 import '../styles.less';
+
+const WrapPage = dynamic(() => import('./_wrapPage'), {
+  ssr: false,
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -11,9 +15,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Metaplex NFT Marketplace</title>
       </Head>
-      <WrapPage>
-        <Component {...pageProps} />
-      </WrapPage>
+      <div id="root">
+        <WrapPage>
+          <Component {...pageProps} />
+        </WrapPage>
+      </div>
     </>
   );
 }

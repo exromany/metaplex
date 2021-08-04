@@ -1,5 +1,8 @@
-import React from 'react';
-import { BillingView } from '../../../views/auction/billing';
+import dynamic from 'next/dynamic';
+
+const BillingView = dynamic(() => import('../../../views/auction/billing'), {
+  ssr: false,
+});
 
 export default function AuctionBillingPage() {
   return <BillingView />;

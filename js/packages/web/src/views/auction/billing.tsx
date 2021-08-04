@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {useRouter} from 'next/router'
+import { useRouter } from 'next/router';
 import { Row, Col, Layout, Spin, Button, Table } from 'antd';
 import {
   useArt,
@@ -39,8 +39,8 @@ const { useWallet } = contexts.Wallet;
 const { Content } = Layout;
 
 export const BillingView = () => {
-  const router = useRouter()
-  const { id } = router.query as { id: string }
+  const router = useRouter();
+  const { id } = router.query as { id: string };
   const auctionView = useAuction(id);
   const connection = useConnection();
   const { wallet } = useWallet();
@@ -57,6 +57,8 @@ export const BillingView = () => {
     <Spin />
   );
 };
+
+export default BillingView;
 
 function getLosingParticipationPrice(
   el: ParsedAccount<BidderMetadata>,
@@ -247,7 +249,7 @@ export function useBillingInfo({ auctionView }: { auctionView: AuctionView }) {
   // Uncancelled bids or bids that were cancelled for refunds but only after redeemed
   // for participation
   const usableBids = bids.filter(
-    b => 
+    b =>
       !b.info.cancelled ||
       bidRedemptions[
         participationBidRedemptionKeys[b.pubkey.toBase58()]?.toBase58()
