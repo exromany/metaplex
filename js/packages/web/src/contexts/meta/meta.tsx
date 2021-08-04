@@ -12,6 +12,7 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  FC,
 } from 'react';
 import { loadMeta } from './loadMeta';
 import { MetaState, MetaContextState, UpdateStateValueFunc } from './types';
@@ -23,6 +24,7 @@ import { processMetaData } from './processMetaData';
 import { processVaultData } from './processVaultData';
 import { processAccounts } from './processAccounts';
 import { onChangeAccount } from './onChangeAccount';
+import { DEFAULT_ENDPOINT, deserializeAccounts } from './preloadMeta';
 
 const MetaContext = React.createContext<MetaContextState>({
   metadata: [],
@@ -47,7 +49,10 @@ const MetaContext = React.createContext<MetaContextState>({
   prizeTrackingTickets: {},
 });
 
-export function MetaProvider({ children = null as any }) {
+export const MetaProvider: FC<{ initAccounts?: any[] }> = ({
+  children,
+  initAccounts,
+}) => {
   const connection = useConnection();
   const { env } = useConnectionConfig();
 
@@ -95,10 +100,19 @@ export function MetaProvider({ children = null as any }) {
 
   useEffect(() => {
     (async () => {
-      console.log('-----> Query started');
-      const accounts = await loadMeta(connection);
+      let accounts;
+      if (initAccounts && env === DEFAULT_ENDPOINT.name) {
+        console.log('------> Use preloaded data');
 
-      console.log('------->Query finished');
+        accounts = deserializeAccounts(initAccounts);
+        initAccounts = undefined;
+      } else {
+        console.log('-----> Query started');
+
+        accounts = await loadMeta(connection);
+
+        console.log('------->Query finished');
+      }
 
       const tempCache = await processAccounts(accounts);
 
@@ -245,7 +259,7 @@ export function MetaProvider({ children = null as any }) {
       {children}
     </MetaContext.Provider>
   );
-}
+};
 
 export const useMeta = () => {
   const context = useContext(MetaContext);

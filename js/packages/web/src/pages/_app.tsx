@@ -1,14 +1,18 @@
-import type { AppProps } from 'next/app';
+import type { AppContext, AppProps } from 'next/app';
+import NextApp from 'next/app';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 
 import '../styles/index.less';
+import { preloadMeta } from '../contexts/meta/preloadMeta';
 
-const WrapPage = dynamic(() => import('./_wrapPage'), {
+const PageProviders = dynamic(() => import('../views/PageProviders'), {
   ssr: false,
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { accounts } = pageProps;
+
   return (
     <>
       <Head>
@@ -16,10 +20,22 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>Metaplex NFT Marketplace</title>
       </Head>
       <div id="root">
-        <WrapPage>
+        <PageProviders accounts={accounts}>
           <Component {...pageProps} />
-        </WrapPage>
+        </PageProviders>
       </div>
     </>
   );
 }
+
+App.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await NextApp.getInitialProps(appContext);
+
+  if (!appContext.ctx.req?.httpVersion) {
+    return appProps;
+  }
+
+  const accounts = await preloadMeta();
+
+  return { ...appProps, pageProps: { ...appProps.pageProps, accounts } };
+};

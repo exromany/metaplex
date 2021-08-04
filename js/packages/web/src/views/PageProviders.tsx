@@ -10,7 +10,7 @@ const { WalletProvider } = contexts.Wallet;
 const { ConnectionProvider } = contexts.Connection;
 const { AccountsProvider } = contexts.Accounts;
 
-const WrapPage: FC = ({ children }) => {
+const PageProviders: FC<{ accounts?: any[] }> = ({ children, accounts }) => {
   return (
     <ConnectionProvider
       storeId={process.env.NEXT_PUBLIC_STORE_OWNER_ADDRESS_ADDRESS}
@@ -19,7 +19,7 @@ const WrapPage: FC = ({ children }) => {
         <UseWalletProvider chainId={5}>
           <AccountsProvider>
             <CoingeckoProvider>
-              <MetaProvider>
+              <MetaProvider initAccounts={accounts}>
                 <ConfettiProvider>
                   <AppLayout>{children}</AppLayout>
                 </ConfettiProvider>
@@ -32,4 +32,4 @@ const WrapPage: FC = ({ children }) => {
   );
 };
 
-export default WrapPage;
+export default PageProviders;
