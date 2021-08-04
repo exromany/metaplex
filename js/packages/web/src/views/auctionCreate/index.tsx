@@ -34,7 +34,7 @@ import {
 } from '@oyster/common';
 import { Connection, LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
 import { MintLayout } from '@solana/spl-token';
-import { useHistory, useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { capitalize } from 'lodash';
 import {
   AuctionManagerSettings,
@@ -124,8 +124,8 @@ export const AuctionCreateView = () => {
   const connection = useConnection();
   const { wallet } = useWallet();
   const { whitelistedCreatorsByCreator } = useMeta();
-  const { step_param }: { step_param: string } = useParams();
-  const history = useHistory();
+  const router = useRouter();
+  const { step_param } = router.query as { step_param: string };
   const mint = useMint(QUOTE_MINT);
   const { width } = useWindowDimensions();
 
@@ -164,7 +164,7 @@ export const AuctionCreateView = () => {
 
   const gotoNextStep = (_step?: number) => {
     const nextStep = _step === undefined ? step + 1 : _step;
-    history.push(`/auction/create/${nextStep.toString()}`);
+    router.push(`/auction/create/${nextStep.toString()}`);
   };
 
   const createAuction = async () => {
@@ -1854,7 +1854,7 @@ const Congrats = (props: {
     auctionManager: PublicKey;
   };
 }) => {
-  const history = useHistory();
+  const router = useRouter();
 
   const newTweetURL = () => {
     const params = {
@@ -1894,7 +1894,7 @@ const Congrats = (props: {
           <Button
             className="metaplex-button"
             onClick={_ =>
-              history.push(`/auction/${props.auction?.auction.toString()}`)
+              router.push(`/auction/${props.auction?.auction.toString()}`)
             }
           >
             <span>See it in your auctions</span>

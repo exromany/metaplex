@@ -1,7 +1,7 @@
 import { Col, Layout } from 'antd';
 import React from 'react';
 import Masonry from 'react-masonry-css';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { ArtistCard } from '../../components/ArtistCard';
 import { useMeta } from '../../contexts';
 
@@ -27,13 +27,15 @@ export const ArtistsView = () => {
       {items.map((m, idx) => {
         const id = m.info.address.toBase58();
         return (
-          <Link to={`/artists/${id}`} key={idx}>
-            <ArtistCard key={id} artist={{
-              address: m.info.address.toBase58(),
-              name: m.info.name || '',
-              image: m.info.image || '',
-              link: m.info.twitter || ''
-            }} />
+          <Link href={`/artists/${id}`} key={idx}>
+            <a>
+              <ArtistCard key={id} artist={{
+                address: m.info.address.toBase58(),
+                name: m.info.name || '',
+                image: m.info.image || '',
+                link: m.info.twitter || ''
+              }} />
+            </a>
           </Link>
         );
       })}

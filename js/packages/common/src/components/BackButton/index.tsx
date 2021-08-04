@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button } from 'antd';
 import { LABELS } from '../../constants';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 export const BackButton = () => {
-  const history = useHistory();
+  const router = useRouter();
   return (
-    <Button type="text" onClick={history.goBack}>
+    <Button type="text" onClick={() => router.back()}>
       {LABELS.GO_BACK_ACTION}
     </Button>
   );

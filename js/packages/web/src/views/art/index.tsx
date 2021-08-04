@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Divider, Layout, Tag, Button, Skeleton } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useArt, useExtendedArt } from './../../hooks';
 
 import { ArtContent } from '../../components/ArtContent';
@@ -14,7 +14,8 @@ import { ArtType } from '../../types';
 const { Content } = Layout;
 
 export const ArtView = () => {
-  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const { id } = router.query as { id: string };
   const { wallet } = useWallet();
 
   const connection = useConnection();

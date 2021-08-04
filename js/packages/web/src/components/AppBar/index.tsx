@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Button, Dropdown, Menu } from 'antd';
 import { ConnectButton, CurrentUserBadge, useWallet } from '@oyster/common';
 import { Notifications } from '../Notifications';
@@ -27,11 +27,11 @@ const UserActions = () => {
         <Button className="app-btn">Bids</Button>
       </Link> */}
       {canCreate ? (
-        <Link to={`/art/create`}>
+        <Link href={`/art/create`}>
           <Button className="app-btn">Create</Button>
         </Link>
       ) : null}
-      <Link to={`/auction/create/0`}>
+      <Link href={`/auction/create/0`}>
         <Button className="connector" type="primary">
           Sell
         </Button>
@@ -49,15 +49,15 @@ const DefaultActions = ({ vertical = false }: { vertical?: boolean }) => {
         flexDirection: vertical ? 'column' : 'row',
       }}
     >
-      <Link to={`/`}>
+      <Link href={`/`}>
         <Button className="app-btn">Explore</Button>
       </Link>
-      <Link to={`/artworks`}>
+      <Link href={`/artworks`}>
         <Button className="app-btn">
           {connected ? 'My Items' : 'Artworks'}
         </Button>
       </Link>
-      <Link to={`/artists`}>
+      <Link href={`/artists`}>
         <Button className="app-btn">Creators</Button>
       </Link>
     </div>
@@ -78,19 +78,19 @@ const MetaplexMenu = () => {
           overlay={
             <Menu>
               <Menu.Item>
-                <Link to={`/`}>
+                <Link href={`/`}>
                   <Button className="app-btn">Explore</Button>
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <Link to={`/artworks`}>
+                <Link href={`/artworks`}>
                   <Button className="app-btn">
                     {connected ? 'My Items' : 'Artworks'}
                   </Button>
                 </Link>
               </Menu.Item>
               <Menu.Item>
-                <Link to={`/artists`}>
+                <Link href={`/artists`}>
                   <Button className="app-btn">Creators</Button>
                 </Link>
               </Menu.Item>

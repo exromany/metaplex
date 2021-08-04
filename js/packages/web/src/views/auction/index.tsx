@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { Row, Col, Button, Skeleton, Carousel } from 'antd';
 import { AuctionCard } from '../../components/AuctionCard';
 import { Connection, PublicKey } from '@solana/web3.js';
@@ -73,7 +73,8 @@ export const AuctionItem = ({
 };
 
 export const AuctionView = () => {
-  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const { id } = router.query as { id: string };
   const { env } = useConnectionConfig();
   const auction = useAuction(id);
   const [currentIndex, setCurrentIndex] = useState(0);

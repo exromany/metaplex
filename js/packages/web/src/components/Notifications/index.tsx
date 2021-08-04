@@ -14,7 +14,7 @@ import {
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Badge, Popover, List } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { closePersonalEscrow } from '../../actions/closePersonalEscrow';
 import { decommAuctionManagerAndReturnPrizes } from '../../actions/decommAuctionManagerAndReturnPrizes';
 import { sendSignMetadata } from '../../actions/sendSignMetadata';
@@ -255,7 +255,9 @@ export function useSettlementAuctions({
           <span>
             One of your auctions ended and it has monies that can be claimed.
             For more detail,{' '}
-            <Link to={`/auction/${auctionKey}/billing`}>click here.</Link>
+            <Link href={`/auction/${auctionKey}/billing`}>
+              <a>click here.</a>
+            </Link>
           </span>
         ),
         action: async () => {
@@ -399,7 +401,9 @@ export function Notifications() {
           {whitelistedCreatorsByCreator[m.info.updateAuthority.toBase58()]?.info
             ?.name || m.pubkey.toBase58()}{' '}
           wants you to approve that you helped create their art{' '}
-          <Link to={`/art/${m.pubkey.toBase58()}`}>here.</Link>
+          <Link href={`/art/${m.pubkey.toBase58()}`}>
+            <a>here.</a>
+          </Link>
         </span>
       ),
       action: async () => {

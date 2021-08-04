@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import { LABELS } from '../../constants';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export const ActionConfirmation = (props: {
   className?: string;
@@ -19,7 +19,7 @@ export const ActionConfirmation = (props: {
       <h2>Congratulations!</h2>
       <div>Your action has been successfully executed</div>
       <div className="success-icon" />
-      <Link to="/dashboard">
+      <Link href="/dashboard">
         <Button type="primary">{LABELS.DASHBOARD_ACTION}</Button>
       </Link>
       <Button type="text" onClick={props.onClose}>

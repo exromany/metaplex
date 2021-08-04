@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ArtCard } from '../../components/ArtCard';
 import { Layout, Row, Col, Tabs } from 'antd';
 import Masonry from 'react-masonry-css';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useCreatorArts, useUserArts } from '../../hooks';
 import { useMeta } from '../../contexts';
 import { CardLoader } from '../../components/MyLoader';
@@ -34,8 +34,8 @@ export const ArtworksView = () => {
   const items =
     (activeKey === ArtworkViewState.Owned
       ? ownedMetadata.map(m => m.metadata)
-      : (activeKey === ArtworkViewState.Created 
-        ? createdMetadata 
+      : (activeKey === ArtworkViewState.Created
+        ? createdMetadata
         : metadata));
 
   useEffect(() => {
@@ -53,10 +53,11 @@ export const ArtworksView = () => {
       columnClassName="my-masonry-grid_column"
     >
       {!isLoading
-        ? items.map((m, idx) => {
+        ? items.map((m) => {
             const id = m.pubkey.toBase58();
             return (
-              <Link to={`/art/${id}`} key={idx}>
+              <Link href={`/art/${id}`} key={id}>
+                <a>
                 <ArtCard
                   key={id}
                   pubkey={m.pubkey}
@@ -64,6 +65,7 @@ export const ArtworksView = () => {
                   height={250}
                   width={250}
                 />
+                </a>
               </Link>
             );
           })

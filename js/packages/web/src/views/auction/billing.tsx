@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import {useRouter} from 'next/router'
 import { Row, Col, Layout, Spin, Button, Table } from 'antd';
 import {
   useArt,
@@ -39,7 +39,8 @@ const { useWallet } = contexts.Wallet;
 const { Content } = Layout;
 
 export const BillingView = () => {
-  const { id } = useParams<{ id: string }>();
+  const router = useRouter()
+  const { id } = router.query as { id: string }
   const auctionView = useAuction(id);
   const connection = useConnection();
   const { wallet } = useWallet();

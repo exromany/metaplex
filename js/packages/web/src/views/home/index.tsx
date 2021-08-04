@@ -6,7 +6,8 @@ import { PreSaleBanner } from '../../components/PreSaleBanner';
 import { AuctionViewState, useAuctions, AuctionView } from '../../hooks';
 
 import { AuctionRenderCard } from '../../components/AuctionRenderCard';
-import { Link, useHistory } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { CardLoader } from '../../components/MyLoader';
 import { useMeta } from '../../contexts';
 import BN from 'bn.js';
@@ -33,7 +34,7 @@ export const HomeView = () => {
   const { isLoading, store } = useMeta();
   const [isInitalizingStore, setIsInitalizingStore] = useState(false);
   const connection = useConnection();
-  const history = useHistory();
+  const router = useRouter();
   const { wallet, connect, connected } = useWallet();
   const breakpointColumnsObj = {
     default: 4,
@@ -45,9 +46,9 @@ export const HomeView = () => {
   // Check if the auction is primary sale or not
   const checkPrimarySale = (auc:AuctionView) => {
     var flag = 0;
-    auc.items.forEach(i => 
+    auc.items.forEach(i =>
       {
-        i.forEach(j => { 
+        i.forEach(j => {
           if (j.metadata.info.primarySaleHappened == true) {
             flag = 1;
             return true;
@@ -106,8 +107,10 @@ export const HomeView = () => {
 
             const id = m.auction.pubkey.toBase58();
             return (
-              <Link to={`/auction/${id}`} key={idx}>
+              <Link href={`/auction/${id}`} key={idx}>
+                <a>
                 <AuctionRenderCard key={id} auctionView={m} />
+                </a>
               </Link>
             );
           })
@@ -129,8 +132,10 @@ export const HomeView = () => {
 
               const id = m.auction.pubkey.toBase58();
               return (
-                <Link to={`/auction/${id}`} key={idx}>
+              <Link href={`/auction/${id}`} key={idx}>
+                <a>
                   <AuctionRenderCard key={id} auctionView={m} />
+                </a>
                 </Link>
               );
             })
@@ -184,7 +189,7 @@ export const HomeView = () => {
                     }),
                   ]);
 
-                  history.push('/admin');
+                  router.push('/admin');
 
                   window.location.reload();
                 }}

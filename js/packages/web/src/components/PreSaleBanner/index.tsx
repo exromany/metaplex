@@ -4,8 +4,8 @@ import { Col, Row, Button, Skeleton } from 'antd';
 import { AuctionView, useArt } from '../../hooks';
 import { ArtContent } from '../ArtContent';
 import { AuctionCard } from '../AuctionCard';
-import { Link } from 'react-router-dom';
 import { useMeta } from '../../contexts';
+import Link from 'next/link';
 
 interface IPreSaleBanner {
   auction?: AuctionView;
@@ -43,7 +43,7 @@ export const PreSaleBanner = ({ auction }: IPreSaleBanner) => {
             hideDefaultAction={true}
             action={
               <>
-                <Link to={`/auction/${auction.auction.pubkey.toBase58()}`}>
+                <Link href={`/auction/${auction.auction.pubkey.toBase58()}`}>
                   <Button
                     type="primary"
                     size="large"

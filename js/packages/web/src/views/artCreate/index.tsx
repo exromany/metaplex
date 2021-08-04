@@ -34,7 +34,7 @@ import {
 import { getAssetCostToStore, LAMPORT_MULTIPLIER } from '../../utils/assets';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { MintLayout } from '@solana/spl-token';
-import { useHistory, useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { cleanName, getLast } from '../../utils/utils';
 import { AmountLabel } from '../../components/AmountLabel';
 import useWindowDimensions from '../../utils/layout';
@@ -47,8 +47,8 @@ export const ArtCreateView = () => {
   const connection = useConnection();
   const { env } = useConnectionConfig();
   const { wallet } = useWallet();
-  const { step_param }: { step_param: string } = useParams();
-  const history = useHistory();
+  const router = useRouter();
+  const { step_param } = router.query as { step_param: string };
   const { width } = useWindowDimensions();
 
   const [step, setStep] = useState<number>(0);
@@ -74,10 +74,10 @@ export const ArtCreateView = () => {
 
   const gotoStep = useCallback(
     (_step: number) => {
-      history.push(`/art/create/${_step.toString()}`);
+      router.push(`/art/create/${_step.toString()}`);
       if (_step === 0) setStepsVisible(true);
     },
-    [history],
+    [router],
   );
 
   useEffect(() => {
@@ -1063,7 +1063,7 @@ const Congrats = (props: {
     metadataAccount: PublicKey;
   };
 }) => {
-  const history = useHistory();
+  const router = useRouter();
 
   const newTweetURL = () => {
     const params = {
@@ -1093,7 +1093,7 @@ const Congrats = (props: {
         <Button
           className="metaplex-button"
           onClick={_ =>
-            history.push(`/art/${props.nft?.metadataAccount.toString()}`)
+            router.push(`/art/${props.nft?.metadataAccount.toString()}`)
           }
         >
           <span>See it in your collection</span>
@@ -1101,7 +1101,7 @@ const Congrats = (props: {
         </Button>
         <Button
           className="metaplex-button"
-          onClick={_ => history.push('/auction/create')}
+          onClick={_ => router.push('/auction/create')}
         >
           <span>Sell it via auction</span>
           <span>&gt;</span>
