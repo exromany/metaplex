@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 
-import '../styles.less';
+import '../styles/index.less';
 
 const WrapPage = dynamic(() => import('./_wrapPage'), {
   ssr: false,
