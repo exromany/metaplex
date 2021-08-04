@@ -120,7 +120,7 @@ export function ConnectionProvider({
   }, [env]);
 
   setStoreID(storeId);
-  setProgramIds(env);
+  setProgramIds();
 
   // The websocket library solana/web3.js uses closes its websocket connection when the subscription list
   // is empty after opening its first time, preventing subsequent subscriptions from receiving responses.

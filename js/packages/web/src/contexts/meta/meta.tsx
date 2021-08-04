@@ -1,7 +1,5 @@
 import {
-  programIds,
   useConnection,
-  setProgramIds,
   useConnectionConfig,
   AUCTION_ID,
   METAPLEX_ID,
@@ -99,8 +97,6 @@ export function MetaProvider({ children = null as any }) {
     (async () => {
       console.log('-----> Query started');
       const accounts = await loadMeta(connection);
-
-      await setProgramIds(env);
 
       console.log('------->Query finished');
 

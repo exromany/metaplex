@@ -15,23 +15,6 @@ import {
 
 export const ENABLE_FEES_INPUT = false;
 
-// legacy pools are used to show users contributions in those pools to allow for withdrawals of funds
-export const PROGRAM_IDS = [
-  {
-    name: 'mainnet-beta',
-  },
-  {
-    name: 'testnet',
-  },
-
-  {
-    name: 'devnet',
-  },
-  {
-    name: 'localnet',
-  },
-];
-
 let STORE_OWNER_ADDRESS: PublicKey | undefined;
 
 export const setStoreID = (storeId: any) => {
@@ -61,12 +44,7 @@ const getStoreID = async () => {
   return CUSTOM;
 };
 
-export const setProgramIds = async (envName: string) => {
-  let instance = PROGRAM_IDS.find(env => envName.indexOf(env.name) >= 0);
-  if (!instance) {
-    return;
-  }
-
+export const setProgramIds = async () => {
   if (!STORE) {
     STORE = await getStoreID();
   }
