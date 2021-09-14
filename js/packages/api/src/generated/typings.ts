@@ -78,6 +78,7 @@ export interface NexusGenInputs {
 export interface NexusGenEnums {
   AuctionInputState: 'all' | 'ended' | 'live' | 'resale';
   AuctionState: 0 | 2 | 1;
+  AuctionViewState: '3' | '-1' | '2' | '0' | '1';
   BidStateType: 0 | 1;
   MetadataKey: 7 | 1 | 2 | 6 | 4 | 0;
   NonWinningConstraint: 2 | 1 | 0;
@@ -121,6 +122,7 @@ export interface NexusGenObjects {
     tickSize?: NexusGenScalars['BN'] | null; // BN
     totalUncancelledBids?: NexusGenScalars['BN'] | null; // BN
   };
+  AuctionManager: common.AuctionManager;
   AuctionManagerStateV1: {
     // root type
     status?: number | null; // Int
@@ -155,8 +157,8 @@ export interface NexusGenObjects {
   };
   Bid: {
     // root type
-    amount?: NexusGenScalars['BN'] | null; // BN
-    key?: NexusGenScalars['PublicKey'] | null; // PublicKey
+    amount: NexusGenScalars['BN']; // BN!
+    key: NexusGenScalars['PublicKey']; // PublicKey!
   };
   BidRedemptionTicket: {
     // root type
@@ -164,17 +166,17 @@ export interface NexusGenObjects {
   };
   BidState: {
     // root type
-    bids?: Array<NexusGenRootTypes['Bid'] | null> | null; // [Bid]
-    max?: NexusGenScalars['BN'] | null; // BN
-    type?: NexusGenEnums['BidStateType'] | null; // BidStateType
+    bids: NexusGenRootTypes['Bid'][]; // [Bid!]!
+    max: NexusGenScalars['BN']; // BN!
+    type: NexusGenEnums['BidStateType']; // BidStateType!
   };
   BidderMetadata: {
     // root type
-    auctionPubkey?: NexusGenScalars['PublicKey'] | null; // PublicKey
-    bidderPubkey?: NexusGenScalars['PublicKey'] | null; // PublicKey
-    cancelled?: boolean | null; // Boolean
-    lastBid?: NexusGenScalars['BN'] | null; // BN
-    lastBidTimestamp?: NexusGenScalars['BN'] | null; // BN
+    auctionPubkey: NexusGenScalars['PublicKey']; // PublicKey!
+    bidderPubkey: NexusGenScalars['PublicKey']; // PublicKey!
+    cancelled: boolean; // Boolean!
+    lastBid: NexusGenScalars['BN']; // BN!
+    lastBidTimestamp: NexusGenScalars['BN']; // BN!
   };
   BidderPot: {
     // root type
@@ -208,6 +210,7 @@ export interface NexusGenObjects {
     // root type
     fixedPrice?: NexusGenScalars['BN'] | null; // BN
     nonWinningConstraint?: NexusGenEnums['NonWinningConstraint'] | null; // NonWinningConstraint
+    safetyDepositBoxIndex?: number | null; // Int
     winnerConstraint?: NexusGenEnums['WinningConstraint'] | null; // WinningConstraint
   };
   ParticipationStateV2: {
@@ -222,9 +225,9 @@ export interface NexusGenObjects {
   };
   PriceFloor: {
     // root type
-    hash?: NexusGenScalars['Uint8Array'] | null; // Uint8Array
+    hash: NexusGenScalars['Uint8Array']; // Uint8Array!
     minPrice?: NexusGenScalars['BN'] | null; // BN
-    type?: NexusGenEnums['PriceFloorType'] | null; // PriceFloorType
+    type: NexusGenEnums['PriceFloorType']; // PriceFloorType!
   };
   PrizeTrackingTicket: {
     // root type
@@ -237,11 +240,11 @@ export interface NexusGenObjects {
   Query: {};
   SafetyDepositBox: {
     // root type
-    key?: NexusGenEnums['VaultKey'] | null; // VaultKey
-    order?: number | null; // Int
-    store?: NexusGenScalars['PublicKey'] | null; // PublicKey
-    tokenMint?: NexusGenScalars['PublicKey'] | null; // PublicKey
-    vault?: NexusGenScalars['PublicKey'] | null; // PublicKey
+    key: NexusGenEnums['VaultKey']; // VaultKey!
+    order: number; // Int!
+    store: NexusGenScalars['PublicKey']; // PublicKey!
+    tokenMint: NexusGenScalars['PublicKey']; // PublicKey!
+    vault: NexusGenScalars['PublicKey']; // PublicKey!
   };
   SafetyDepositConfig: {
     // root type
@@ -284,9 +287,6 @@ export interface NexusGenObjects {
 export interface NexusGenInterfaces {}
 
 export interface NexusGenUnions {
-  AuctionManager:
-    | NexusGenRootTypes['AuctionManagerV1']
-    | NexusGenRootTypes['AuctionManagerV2'];
   MasterEdition:
     | NexusGenRootTypes['MasterEditionV1']
     | NexusGenRootTypes['MasterEditionV2'];
@@ -326,26 +326,39 @@ export interface NexusGenFieldTypes {
   Auction: {
     // field return type
     auctionGap: NexusGenScalars['BN'] | null; // BN
-    authority: NexusGenScalars['PublicKey'] | null; // PublicKey
+    authority: NexusGenScalars['PublicKey']; // PublicKey!
     bidRedemptionKey: NexusGenScalars['PublicKey'] | null; // PublicKey
-    bidState: NexusGenRootTypes['BidState'] | null; // BidState
+    bidState: NexusGenRootTypes['BidState']; // BidState!
+    bids: NexusGenRootTypes['BidderMetadata'][]; // [BidderMetadata!]!
     endAuctionAt: NexusGenScalars['BN'] | null; // BN
     endedAt: NexusGenScalars['BN'] | null; // BN
     highestBid: NexusGenRootTypes['BidderMetadata'] | null; // BidderMetadata
     lastBid: NexusGenScalars['BN'] | null; // BN
-    manager: NexusGenRootTypes['AuctionManager'] | null; // AuctionManager
-    numWinners: NexusGenScalars['BN'] | null; // BN
-    priceFloor: NexusGenRootTypes['PriceFloor'] | null; // PriceFloor
+    manager: NexusGenRootTypes['AuctionManager']; // AuctionManager!
+    numWinners: NexusGenScalars['BN']; // BN!
+    priceFloor: NexusGenRootTypes['PriceFloor']; // PriceFloor!
     pubkey: NexusGenScalars['PublicKey']; // PublicKey!
-    state: NexusGenEnums['AuctionState'] | null; // AuctionState
-    tokenMint: NexusGenScalars['PublicKey'] | null; // PublicKey
-    trumbnail: NexusGenRootTypes['Artwork'] | null; // Artwork
+    state: NexusGenEnums['AuctionState']; // AuctionState!
+    thumbnail: NexusGenRootTypes['Artwork'] | null; // Artwork
+    tokenMint: NexusGenScalars['PublicKey']; // PublicKey!
+    viewState: NexusGenEnums['AuctionViewState']; // AuctionViewState!
   };
   AuctionDataExtended: {
     // field return type
     gapTickSizePercentage: number | null; // Int
     tickSize: NexusGenScalars['BN'] | null; // BN
     totalUncancelledBids: NexusGenScalars['BN'] | null; // BN
+  };
+  AuctionManager: {
+    // field return type
+    acceptPayment: NexusGenScalars['PublicKey']; // PublicKey!
+    auction: NexusGenScalars['PublicKey']; // PublicKey!
+    authority: NexusGenScalars['PublicKey']; // PublicKey!
+    participationConfig: NexusGenRootTypes['ParticipationConfigV2'] | null; // ParticipationConfigV2
+    safetyDepositBoxes: NexusGenRootTypes['SafetyDepositBox'][]; // [SafetyDepositBox!]!
+    safetyDepositBoxesExpected: NexusGenScalars['BN']; // BN!
+    store: NexusGenScalars['PublicKey']; // PublicKey!
+    vault: NexusGenScalars['PublicKey']; // PublicKey!
   };
   AuctionManagerStateV1: {
     // field return type
@@ -381,8 +394,8 @@ export interface NexusGenFieldTypes {
   };
   Bid: {
     // field return type
-    amount: NexusGenScalars['BN'] | null; // BN
-    key: NexusGenScalars['PublicKey'] | null; // PublicKey
+    amount: NexusGenScalars['BN']; // BN!
+    key: NexusGenScalars['PublicKey']; // PublicKey!
   };
   BidRedemptionTicket: {
     // field return type
@@ -390,17 +403,17 @@ export interface NexusGenFieldTypes {
   };
   BidState: {
     // field return type
-    bids: Array<NexusGenRootTypes['Bid'] | null> | null; // [Bid]
-    max: NexusGenScalars['BN'] | null; // BN
-    type: NexusGenEnums['BidStateType'] | null; // BidStateType
+    bids: NexusGenRootTypes['Bid'][]; // [Bid!]!
+    max: NexusGenScalars['BN']; // BN!
+    type: NexusGenEnums['BidStateType']; // BidStateType!
   };
   BidderMetadata: {
     // field return type
-    auctionPubkey: NexusGenScalars['PublicKey'] | null; // PublicKey
-    bidderPubkey: NexusGenScalars['PublicKey'] | null; // PublicKey
-    cancelled: boolean | null; // Boolean
-    lastBid: NexusGenScalars['BN'] | null; // BN
-    lastBidTimestamp: NexusGenScalars['BN'] | null; // BN
+    auctionPubkey: NexusGenScalars['PublicKey']; // PublicKey!
+    bidderPubkey: NexusGenScalars['PublicKey']; // PublicKey!
+    cancelled: boolean; // Boolean!
+    lastBid: NexusGenScalars['BN']; // BN!
+    lastBidTimestamp: NexusGenScalars['BN']; // BN!
   };
   BidderPot: {
     // field return type
@@ -440,6 +453,7 @@ export interface NexusGenFieldTypes {
     // field return type
     fixedPrice: NexusGenScalars['BN'] | null; // BN
     nonWinningConstraint: NexusGenEnums['NonWinningConstraint'] | null; // NonWinningConstraint
+    safetyDepositBoxIndex: number | null; // Int
     winnerConstraint: NexusGenEnums['WinningConstraint'] | null; // WinningConstraint
   };
   ParticipationStateV2: {
@@ -454,9 +468,9 @@ export interface NexusGenFieldTypes {
   };
   PriceFloor: {
     // field return type
-    hash: NexusGenScalars['Uint8Array'] | null; // Uint8Array
+    hash: NexusGenScalars['Uint8Array']; // Uint8Array!
     minPrice: NexusGenScalars['BN'] | null; // BN
-    type: NexusGenEnums['PriceFloorType'] | null; // PriceFloorType
+    type: NexusGenEnums['PriceFloorType']; // PriceFloorType!
   };
   PrizeTrackingTicket: {
     // field return type
@@ -469,24 +483,25 @@ export interface NexusGenFieldTypes {
   Query: {
     // field return type
     artwork: NexusGenRootTypes['Artwork'] | null; // Artwork
-    artworks: Array<NexusGenRootTypes['Artwork'] | null> | null; // [Artwork]
+    artworks: NexusGenRootTypes['Artwork'][] | null; // [Artwork!]
     artworksCount: number | null; // Int
     auction: NexusGenRootTypes['Auction'] | null; // Auction
-    auctions: Array<NexusGenRootTypes['Auction'] | null> | null; // [Auction]
+    auctions: NexusGenRootTypes['Auction'][] | null; // [Auction!]
     auctionsCount: number | null; // Int
     creator: NexusGenRootTypes['Creator'] | null; // Creator
-    creators: Array<NexusGenRootTypes['Creator'] | null> | null; // [Creator]
+    creators: NexusGenRootTypes['Creator'][] | null; // [Creator!]
     creatorsCount: number | null; // Int
     store: NexusGenRootTypes['Store'] | null; // Store
+    stores: NexusGenRootTypes['Store'][] | null; // [Store!]
     storesCount: number | null; // Int
   };
   SafetyDepositBox: {
     // field return type
-    key: NexusGenEnums['VaultKey'] | null; // VaultKey
-    order: number | null; // Int
-    store: NexusGenScalars['PublicKey'] | null; // PublicKey
-    tokenMint: NexusGenScalars['PublicKey'] | null; // PublicKey
-    vault: NexusGenScalars['PublicKey'] | null; // PublicKey
+    key: NexusGenEnums['VaultKey']; // VaultKey!
+    order: number; // Int!
+    store: NexusGenScalars['PublicKey']; // PublicKey!
+    tokenMint: NexusGenScalars['PublicKey']; // PublicKey!
+    vault: NexusGenScalars['PublicKey']; // PublicKey!
   };
   SafetyDepositConfig: {
     // field return type
@@ -557,6 +572,7 @@ export interface NexusGenFieldTypeNames {
     authority: 'PublicKey';
     bidRedemptionKey: 'PublicKey';
     bidState: 'BidState';
+    bids: 'BidderMetadata';
     endAuctionAt: 'BN';
     endedAt: 'BN';
     highestBid: 'BidderMetadata';
@@ -566,14 +582,26 @@ export interface NexusGenFieldTypeNames {
     priceFloor: 'PriceFloor';
     pubkey: 'PublicKey';
     state: 'AuctionState';
+    thumbnail: 'Artwork';
     tokenMint: 'PublicKey';
-    trumbnail: 'Artwork';
+    viewState: 'AuctionViewState';
   };
   AuctionDataExtended: {
     // field return type name
     gapTickSizePercentage: 'Int';
     tickSize: 'BN';
     totalUncancelledBids: 'BN';
+  };
+  AuctionManager: {
+    // field return type name
+    acceptPayment: 'PublicKey';
+    auction: 'PublicKey';
+    authority: 'PublicKey';
+    participationConfig: 'ParticipationConfigV2';
+    safetyDepositBoxes: 'SafetyDepositBox';
+    safetyDepositBoxesExpected: 'BN';
+    store: 'PublicKey';
+    vault: 'PublicKey';
   };
   AuctionManagerStateV1: {
     // field return type name
@@ -668,6 +696,7 @@ export interface NexusGenFieldTypeNames {
     // field return type name
     fixedPrice: 'BN';
     nonWinningConstraint: 'NonWinningConstraint';
+    safetyDepositBoxIndex: 'Int';
     winnerConstraint: 'WinningConstraint';
   };
   ParticipationStateV2: {
@@ -706,6 +735,7 @@ export interface NexusGenFieldTypeNames {
     creators: 'Creator';
     creatorsCount: 'Int';
     store: 'Store';
+    stores: 'Store';
     storesCount: 'Int';
   };
   SafetyDepositBox: {
@@ -789,7 +819,6 @@ export interface NexusGenArgTypes {
 }
 
 export interface NexusGenAbstractTypeMembers {
-  AuctionManager: 'AuctionManagerV1' | 'AuctionManagerV2';
   MasterEdition: 'MasterEditionV1' | 'MasterEditionV2';
 }
 
@@ -809,9 +838,7 @@ export type NexusGenUnionNames = keyof NexusGenUnions;
 
 export type NexusGenObjectsUsingAbstractStrategyIsTypeOf = never;
 
-export type NexusGenAbstractsUsingStrategyResolveType =
-  | 'AuctionManager'
-  | 'MasterEdition';
+export type NexusGenAbstractsUsingStrategyResolveType = 'MasterEdition';
 
 export type NexusGenFeaturesConfig = {
   abstractTypeStrategies: {

@@ -10,7 +10,9 @@ export type FieldPubkey = { pubkey: string };
 export type Artwork = Meta & FieldPubkey;
 export type Creator = WhitelistedCreator & FieldPubkey;
 
+export type AuctionManager = (AuctionManagerV1 | AuctionManagerV2) &
+  FieldPubkey;
 export type Auction = AuctionData &
   FieldPubkey & {
-    manager: (AuctionManagerV1 | AuctionManagerV2) & FieldPubkey;
+    manager: AuctionManager;
   };

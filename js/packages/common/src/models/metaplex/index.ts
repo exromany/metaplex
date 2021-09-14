@@ -113,14 +113,10 @@ export class AuctionManager {
     this.pubkey = args.instance.pubkey;
     this.instance = args.instance;
     this.numWinners = args.auction.info.bidState.max;
-    this.safetyDepositBoxesExpected =
-      this.instance.info.key == MetaplexKey.AuctionManagerV2
-        ? new BN(args.vault.info.tokenTypeCount)
-        : new BN(
-            (
-              this.instance.info as AuctionManagerV1
-            ).state.winningConfigItemsValidated,
-          );
+    this.safetyDepositBoxesExpected = getSafetyDepositBoxesExpected(
+      this.instance.info,
+      args.vault.info,
+    );
     this.store = this.instance.info.store;
     this.authority = this.instance.info.authority;
     this.vault = this.instance.info.vault;
@@ -251,6 +247,14 @@ export class AuctionManager {
   }
 }
 
+export function getSafetyDepositBoxesExpected(
+  manager: AuctionManagerV2 | AuctionManagerV1,
+  vault: Vault,
+) {
+  return manager.key == MetaplexKey.AuctionManagerV2
+    ? new BN(vault.tokenTypeCount)
+    : new BN((manager as AuctionManagerV1).state.winningConfigItemsValidated);
+}
 export class AuctionManagerV2 {
   key: MetaplexKey;
   store: StringPublicKey;

@@ -1,7 +1,7 @@
 import type { ParsedAccount } from '@oyster/common';
 import { FieldPubkey } from '../sourceTypes';
 
-export const mapInfo = <T>(list: ParsedAccount<T>[]) => {
+export const listWrapPubkey = <T>(list: ParsedAccount<T>[]) => {
   return list.map(i => wrapPubkey(i));
 };
 

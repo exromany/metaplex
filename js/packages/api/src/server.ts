@@ -39,6 +39,7 @@ async function startApolloServer() {
         Artwork: 'common.Artwork',
         Creator: 'common.Creator',
         Auction: 'common.Auction',
+        AuctionManager: 'common.AuctionManager',
       },
     },
     contextType: {

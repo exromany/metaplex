@@ -28,6 +28,7 @@ import {
   SafetyDepositConfig,
   WinningConfigType,
 } from './metaplex';
+import { MetaState } from '../contexts/meta/types';
 
 export interface SafetyDepositDraft {
   metadata: ParsedAccount<Metadata>;
@@ -242,9 +243,9 @@ export function processAccountsIntoAuctionView(
     }
 
     const vaultKey = auctionManager.vault;
-    const boxes: ParsedAccount<SafetyDepositBox>[] = buildListWhileNonZero(
-      safetyDepositBoxesByVaultAndIndex,
+    const boxes = getSafetyDepositBoxes(
       vaultKey,
+      safetyDepositBoxesByVaultAndIndex,
     );
     if (boxes.length > 0) {
       let participationMetadata: ParsedAccount<Metadata> | undefined =
@@ -331,6 +332,13 @@ export function processAccountsIntoAuctionView(
   }
 
   return undefined;
+}
+
+export function getSafetyDepositBoxes(
+  vaultId: StringPublicKey,
+  safetyDepositBoxesByVaultAndIndex: MetaState['safetyDepositBoxesByVaultAndIndex'],
+) {
+  return buildListWhileNonZero(safetyDepositBoxesByVaultAndIndex, vaultId);
 }
 
 export function getAuctionBids(

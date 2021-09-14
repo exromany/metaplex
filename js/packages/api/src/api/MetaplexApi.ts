@@ -8,7 +8,7 @@ import {
   getAuctionById,
   getAuctionsByStoreId,
 } from '../auction/filters';
-import { mapInfo, wrapPubkey } from '../utils/mapInfo';
+import { listWrapPubkey, wrapPubkey } from '../utils/mapInfo';
 import { ConnectionConfig } from './ConnectionConfig';
 
 export class MetaplexApi {
@@ -23,6 +23,11 @@ export class MetaplexApi {
 
   get state() {
     return this.config.load();
+  }
+
+  async getStores() {
+    const { stores } = await this.state;
+    return listWrapPubkey(Object.values(stores));
   }
 
   async getStore(storeId: string) {
@@ -51,7 +56,7 @@ export class MetaplexApi {
         creatorsByStore.push(creator);
       }
     }
-    return mapInfo(creatorsByStore);
+    return listWrapPubkey(creatorsByStore);
   }
 
   async getCreator(storeId: string, creatorId?: string | null) {
@@ -71,7 +76,7 @@ export class MetaplexApi {
       filterByOwner({ ownerId }, this),
     ]);
 
-    return mapInfo(metadata).filter(
+    return listWrapPubkey(metadata).filter(
       art => storeFilter(art) && ownerFilter(art),
     );
   }

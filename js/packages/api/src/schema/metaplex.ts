@@ -1,5 +1,4 @@
-import { enumType, objectType, unionType } from 'nexus';
-import { MetaplexKey } from '@oyster/common/dist/lib/models/metaplex/index';
+import { enumType, objectType } from 'nexus';
 
 export const AuctionManagerV1 = objectType({
   name: 'AuctionManagerV1',
@@ -26,19 +25,6 @@ export const AuctionManagerV2 = objectType({
     t.pubkey('vault');
     t.pubkey('acceptPayment');
     t.field('state', { type: AuctionManagerStateV2 });
-  },
-});
-
-export const AuctionManager = unionType({
-  name: 'AuctionManager',
-  resolveType(obj) {
-    if (obj.key === MetaplexKey.AuctionManagerV2) {
-      return 'AuctionManagerV2';
-    }
-    return 'AuctionManagerV1';
-  },
-  definition(t) {
-    t.members(AuctionManagerV1, AuctionManagerV2);
   },
 });
 
@@ -93,7 +79,7 @@ export const SafetyDepositConfig = objectType({
     t.field('amountType', { type: TupleNumericType });
     t.field('lengthType', { type: TupleNumericType });
     t.list.field('amountRanges', { type: AmountRange });
-    t.nullable.field('participationConfig', { type: ParticipationConfigV2 });
+    t.nullable.field('participationConfig', { type: ParticipationConfig });
     t.nullable.field('participationState', { type: ParticipationStateV2 });
   },
 });
@@ -155,11 +141,12 @@ export const NonWinningConstraint = enumType({
   },
 });
 
-export const ParticipationConfigV2 = objectType({
+export const ParticipationConfig = objectType({
   name: 'ParticipationConfigV2',
   definition(t) {
     t.field('winnerConstraint', { type: WinningConstraint });
     t.field('nonWinningConstraint', { type: NonWinningConstraint });
+    t.int('safetyDepositBoxIndex');
     t.nullable.bn('fixedPrice');
   },
 });

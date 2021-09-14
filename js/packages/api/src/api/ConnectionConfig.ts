@@ -64,7 +64,7 @@ async function createPipelineExecutor<T>(
     index++;
     await executor(iter.value, index);
     complete++;
-    if (complete % 100 === 0) {
+    if (complete % 10000 === 0) {
       console.log(`${name ? name + ': ' : ''}${complete} tasks was processes`);
     }
     if (delay > 0) {

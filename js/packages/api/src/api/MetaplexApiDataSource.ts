@@ -17,7 +17,7 @@ const ENDPOINTS = [
     name: 'devnet',
     endpoint: clusterApiUrl('devnet'),
   },
-];
+].filter(({ name }) => !process.env.ENDPOINT || name === process.env.ENDPOINT);
 
 export class MetaplexApiDataSource<
   TContext extends { network: string | undefined; api: MetaplexApi } = {
