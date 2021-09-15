@@ -1,8 +1,4 @@
-import {
-  Commitment,
-  Connection,
-  GetProgramAccountsConfig,
-} from '@solana/web3.js';
+import { Commitment, GetProgramAccountsConfig } from '@solana/web3.js';
 import { getEmptyMetaState } from '@oyster/common/dist/lib/contexts/meta/getEmptyMetaState';
 import {
   MetaState,
@@ -31,6 +27,8 @@ import {
 } from '@oyster/common/dist/lib/utils/web3';
 import { Metadata } from '@oyster/common/dist/lib/actions/metadata';
 import EventEmitter from 'eventemitter3';
+
+import { Connection } from './Connection';
 
 type MessageData = [PublicKeyStringAndAccount<Buffer>, IConfig];
 type Emitter = EventEmitter<'data'>;
